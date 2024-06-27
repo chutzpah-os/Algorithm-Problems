@@ -50,7 +50,7 @@ The goal is to find all unique triplets in the array that sum up to zero.
 
 ## Code
 ```python
-lass Solution(object):
+Class Solution(object):
     def threeSum(self, nums):
         h= {} # inicializa um dicionário vazio
         n = len(nums) # calcula o comprimento da lista 'nums' e armazena esse valor na variável 'n'
