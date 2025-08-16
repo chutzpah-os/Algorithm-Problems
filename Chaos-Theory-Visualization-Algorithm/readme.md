@@ -5,17 +5,16 @@ Uma aplicação web educativa que demonstra os principais conceitos da **Teoria 
 ### Demonstração Visual
 <img src="/Chaos-Theory-Visualization-Algorithm/screenshots/2.png" alt="Chaos Theory" width="600"> 
 
-
 ##  Objetivo
 
 Este projeto foi desenvolvido para tornar os conceitos abstratos da teoria do caos acessíveis através de **algoritmos visuais interativos**, permitindo explorar na prática como sistemas determinísticos podem exibir comportamento imprevisível.
 
 
-##  Demo Online
+##  Demo Online 
 
 Abra o arquivo `teoria_do_caos_interativo.html` diretamente no seu navegador para explorar as demonstrações.
 
-## 📊 Funcionalidades
+##  Funcionalidades
 
 ### 1.  Mapa Logístico
 - **Visualização em tempo real** da evolução populacional
