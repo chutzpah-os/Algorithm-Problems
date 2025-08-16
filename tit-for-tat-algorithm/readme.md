@@ -6,6 +6,12 @@ A comprehensive interactive system for studying game theory strategies, featurin
 
 This project implements a visual and interactive simulation of various game theory strategies, with a focus on the Tit-for-Tat algorithm that won Robert Axelrod's tournaments in the 1980s. The system allows users to play against AI strategies or run automated simulations between different algorithms.
 
+
+
+## Main Image
+![Real Simulation](tit-for-tat-algorithm/1.jpeg)
+
+
 ## Features
 
 ### Game Modes
@@ -215,3 +221,9 @@ For questions, suggestions, or collaboration:
 ---
 
 *Built for educational purposes and game theory research. Happy strategizing! *
+
+
+## Other Images
+![Human vs Tit-for-tat](tit-for-tat-algorithm/3.jpeg)
+
+![AI vs AI](tit-for-tat-algorithm/2.jpeg)
