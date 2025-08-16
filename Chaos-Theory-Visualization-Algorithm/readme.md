@@ -189,6 +189,12 @@ Se você tem dúvidas, sugestões ou encontrou bugs, abra uma **issue** no GitHu
 
 ---
 
+## Outras Imagens
+
+<img src="/Chaos-Theory-Visualization-Algorithm/screenshots/1.png" alt="Chaos Theory" width="600">
+<img src="/Chaos-Theory-Visualization-Algorithm/screenshots/2.png" alt="Chaos Theory" width="600">
+<img src="/Chaos-Theory-Visualization-Algorithm/screenshots/3.png" alt="Chaos Theory" width="600">
+<img src="/Chaos-Theory-Visualization-Algorithm/screenshots/4.png" alt="Chaos Theory" width="600">
 ### Se este projeto foi útil para você, considere dar uma estrela no GitHub!
 
 **Feito para democratizar o conhecimento matemático**
