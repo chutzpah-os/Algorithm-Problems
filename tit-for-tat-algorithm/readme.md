@@ -9,8 +9,7 @@ This project implements a visual and interactive simulation of various game theo
 
 
 ## Main Image
-![Real Simulation](tit-for-tat-algorithm/1.jpeg)
-
+<img src="/tit-for-tat-algorithm/1.jpeg" alt="Real Simulation" width="500">
 
 ## Features
 
@@ -224,6 +223,8 @@ For questions, suggestions, or collaboration:
 
 
 ## Other Images
-![Human vs Tit-for-tat](tit-for-tat-algorithm/3.jpeg)
+<img src="/tit-for-tat-algorithm/3.jpeg" alt="Human vs Tit-for-tat" width="500">
 
-![AI vs AI](tit-for-tat-algorithm/2.jpeg)
+
+
+<img src="/tit-for-tat-algorithm/2.jpeg" alt="AI vs AI" width="500">
