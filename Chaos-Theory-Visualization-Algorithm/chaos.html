@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teoria do Caos - Demonstração Educativa Completa</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+            color: white;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #64ffda;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 0 0 30px rgba(100, 255, 218, 0.4);
+        }
+        
+        .demo-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-header {
+            background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+            padding: 20px 30px;
+            margin: 0;
+            font-size: 1.4em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        
+        .visualization-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .theory-panel {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #64ffda;
+        }
+        
+        .theory-panel h4 {
+            color: #64ffda;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        canvas {
+            border: 2px solid rgba(100, 255, 218, 0.3);
+            border-radius: 12px;
+            background: #000;
+            width: 100%;
+            max-width: 600px;
+            height: 350px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+        
+        label {
+            font-size: 14px;
+            color: #ccc;
+            font-weight: 500;
+        }
+        
+        input[type="range"] {
+            width: 120px;
+            height: 6px;
+            background: #333;
+            outline: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(45deg, #64ffda, #4db6ac);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(100, 255, 218, 0.4);
+        }
+        
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 107, 0.5);
+        }
+        
+        .value-display {
+            font-family: 'Courier New', monospace;
+            color: #64ffda;
+            font-size: 14px;
+            font-weight: bold;
+            min-width: 70px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+        
+        .formula-box {
+            background: linear-gradient(45deg, rgba(100, 255, 218, 0.1), rgba(100, 255, 218, 0.05));
+            border: 2px solid rgba(100, 255, 218, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        
+        .theorem-box {
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .theorem-box .theorem-title {
+            color: #ff6b6b;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .concept-list {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .concept-list li {
+            margin: 8px 0;
+            padding-left: 10px;
+            border-left: 3px solid #64ffda;
+            list-style: none;
+        }
+        
+        .parameter-explanation {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 3px solid #ffd93d;
+        }
+        
+        .parameter-explanation strong {
+            color: #ffd93d;
+        }
+        
+        .behavior-regions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .region {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .region.extinction { border-left: 4px solid #ff4757; }
+        .region.fixed { border-left: 4px solid #2ed573; }
+        .region.oscillation { border-left: 4px solid #ffa502; }
+        .region.chaos { border-left: 4px solid #ff6348; }
+        
+        .interactive-note {
+            background: linear-gradient(45deg, rgba(255, 215, 61, 0.1), rgba(255, 215, 61, 0.05));
+            border: 1px solid rgba(255, 215, 61, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            color: #ffd93d;
+            font-weight: 500;
+        }
+        
+        .math-symbol {
+            color: #64ffda;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 1200px) {
+            .section-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .control-group {
+                justify-content: space-between;
+            }
+            
+            .behavior-regions {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        .demo-section {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .formula-box {
+            transition: all 0.3s ease;
+        }
+        
+        .formula-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(100, 255, 218, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌀 Teoria do Caos - Demonstração Matemática Completa</h1>
+        
+        <!-- MAPA LOGÍSTICO -->
+        <div class="demo-section">
+            <h3 class="section-header">📈 Mapa Logístico - A Rota para o Caos</h3>
+            <div class="section-content">
+                <div class="visualization-panel">
+                    <canvas id="logisticCanvas"></canvas>
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="rSlider">Parâmetro <span class="math-symbol">r</span>:</label>
+                            <input type="range" id="rSlider" min="0" max="4" step="0.01" value="3.5">
+                            <span class="value-display" id="rValue">3.50</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="x0Slider">Condição inicial <span class="math-symbol">x₀</span>:</label>
+                            <input type="range" id="x0Slider" min="0.01" max="0.99" step="0.01" value="0.5">
+                            <span class="value-display" id="x0Value">0.50</span>
+                        </div>
+                        <button id="resetLogistic">Reset</button>
+                    </div>
+                    
+                    <div class="behavior-regions">
+                        <div class="region extinction"><strong>r < 1:</strong> Extinção</div>
+                        <div class="region fixed"><strong>1 < r < 3:</strong> Ponto Fixo</div>
+                        <div class="region oscillation"><strong>3 < r < 3.57:</strong> Oscilação</div>
+                        <div class="region chaos"><strong>r > 3.57:</strong> Caos</div>
+                    </div>
+                </div>
+                
+                <div class="theory-panel">
+                    <h4>🧮 Fundamentação Matemática</h4>
+                    
+                    <div class="formula-box">
+                        <strong>Equação do Mapa Logístico:</strong><br>
+                        $$x_{n+1} = r \cdot x_n \cdot (1 - x_n)$$
+                    </div>
+                    
+                    <div class="theorem-box">
+                        <div class="theorem-title">Teorema de Feigenbaum</div>
+                        A razão entre intervalos sucessivos de bifurcação converge para a constante δ ≈ 4.669...<br><br>
+                        $$\delta = \lim_{n \to \infty} \frac{r_n - r_{n-1}}{r_{n+1} - r_n}$$
+                    </div>
+                    
+                    <h4>🔍 Análise dos Pontos Fixos</h4>
+                    <p><strong>Ponto fixo trivial:</strong> x* = 0</p>
+                    <p><strong>Ponto fixo não-trivial:</strong> x* = (r-1)/r</p>
+                    
+                    <div class="parameter-explanation">
+                        <strong>Estabilidade Linear:</strong><br>
+                        λ = df/dx|<sub>x*</sub> = r(1-2x*)<br>
+                        • |λ| < 1: estável<br>
+                        • |λ| > 1: instável
+                    </div>
+                    
+                    <h4>📊 Comportamentos por Regime</h4>
+                    <ul class="concept-list">
+                        <li><strong>r < 1:</strong> População se extingue (x → 0)</li>
+                        <li><strong>1 < r < 3:</strong> Converge para ponto fixo estável</li>
+                        <li><strong>r = 3:</strong> Primeira bifurcação (período-2)</li>
+                        <li><strong>3 < r < 1+√6:</strong> Oscilação período-2</li>
+                        <li><strong>r ≈ 3.57:</strong> Início do caos determinístico</li>
+                        <li><strong>r = 4:</strong> Caos completo no intervalo [0,1]</li>
+                    </ul>
+                    
+                    <div class="interactive-note">
+                        💡 <strong>Experimente:</strong> Varie r lentamente de 2.8 a 4.0 e observe as bifurcações em cascata!
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ATRATOR DE LORENZ -->
+        <div class="demo-section">
+            <h3 class="section-header">🌪️ Sistema de Lorenz - Caos em Sistemas Contínuos</h3>
+            <div class="section-content">
+                <div class="visualization-panel">
+                    <canvas id="lorenzCanvas"></canvas>
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="sigmaSlider">Número de Prandtl <span class="math-symbol">σ</span>:</label>
+                            <input type="range" id="sigmaSlider" min="5" max="15" step="0.5" value="10">
+                            <span class="value-display" id="sigmaValue">10.0</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="rhoSlider">Número de Rayleigh <span class="math-symbol">ρ</span>:</label>
+                            <input type="range" id="rhoSlider" min="20" max="35" step="0.5" value="28">
+                            <span class="value-display" id="rhoValue">28.0</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="betaSlider">Parâmetro geométrico <span class="math-symbol">β</span>:</label>
+                            <input type="range" id="betaSlider" min="1" max="4" step="0.1" value="2.67">
+                            <span class="value-display" id="betaValue">2.67</span>
+                        </div>
+                        <button id="resetLorenz">Reset</button>
+                    </div>
+                </div>
+                
+                <div class="theory-panel">
+                    <h4>🌡️ Origem Física</h4>
+                    <p>O sistema de Lorenz foi derivado das <strong>equações de Navier-Stokes</strong> para convecção térmica em fluidos, simplificadas usando a aproximação de Boussinesq.</p>
+                    
+                    <div class="formula-box">
+                        <strong>Sistema de Equações Diferenciais:</strong><br>
+                        $$\frac{dx}{dt} = \sigma(y - x)$$
+                        $$\frac{dy}{dt} = x(\rho - z) - y$$
+                        $$\frac{dz}{dt} = xy - \beta z$$
+                    </div>
+                    
+                    <div class="theorem-box">
+                        <div class="theorem-title">Teorema de Lorenz (1963)</div>
+                        Para σ = 10, β = 8/3, e ρ > 24.74, o sistema apresenta um atrator estranho com dimensão fractal não-inteira (≈ 2.06).
+                    </div>
+                    
+                    <h4>🧬 Propriedades do Atrator</h4>
+                    <ul class="concept-list">
+                        <li><strong>Dissipativo:</strong> Volume no espaço de fases se contrai</li>
+                        <li><strong>Limitado:</strong> Todas as trajetórias ficam em região finita</li>
+                        <li><strong>Sensível:</strong> Dependência exponencial das condições iniciais</li>
+                        <li><strong>Estrutura fractal:</strong> Auto-similaridade em múltiplas escalas</li>
+                    </ul>
+                    
+                    <div class="parameter-explanation">
+                        <strong>Interpretação Física:</strong><br>
+                        • <strong>x:</strong> Intensidade da convecção<br>
+                        • <strong>y:</strong> Diferença de temperatura (horizontal)<br>
+                        • <strong>z:</strong> Diferença de temperatura (vertical)<br>
+                        • <strong>σ:</strong> Razão viscosidade/difusão térmica<br>
+                        • <strong>ρ:</strong> Razão gradiente/gradiente crítico<br>
+                        • <strong>β:</strong> Relacionado à geometria da célula
+                    </div>
+                    
+                    <h4>📏 Expoentes de Lyapunov</h4>
+                    <p>Para os valores clássicos (σ=10, ρ=28, β=8/3):</p>
+                    <div class="formula-box">
+                        λ₁ ≈ +0.906 (direção de expansão)<br>
+                        λ₂ ≈ 0.000 (direção neutra)<br>
+                        λ₃ ≈ -14.572 (direção de contração)
+                    </div>
+                    
+                    <div class="interactive-note">
+                        🔬 <strong>Observe:</strong> Como pequenas mudanças nos parâmetros alteram drasticamente a forma do atrator!
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- EFEITO BORBOLETA -->
+        <div class="demo-section">
+            <h3 class="section-header">🦋 Dependência Sensível às Condições Iniciais</h3>
+            <div class="section-content">
+                <div class="visualization-panel">
+                    <canvas id="butterflyCanvas"></canvas>
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="deltaSlider">Diferença inicial <span class="math-symbol">Δx₀</span>:</label>
+                            <input type="range" id="deltaSlider" min="0.000001" max="0.01" step="0.000001" value="0.000001">
+                            <span class="value-display" id="deltaValue">1e-6</span>
+                        </div>
+                        <button id="startButterfly">Iniciar Comparação</button>
+                        <button id="resetButterfly">Reset</button>
+                    </div>
+                    <div class="info-panel" id="butterflyInfo"></div>
+                </div>
+                
+                <div class="theory-panel">
+                    <h4>🦋 O Efeito Borboleta de Lorenz</h4>
+                    <p><em>"O bater de asas de uma borboleta no Brasil pode causar um tornado no Texas?"</em></p>
+                    
+                    <div class="theorem-box">
+                        <div class="theorem-title">Dependência Sensível (Definição Matemática)</div>
+                        Um sistema dinâmico f tem dependência sensível às condições iniciais se existe δ > 0 tal que, para qualquer x e qualquer vizinhança N de x, existe y ∈ N e n ≥ 0 com:
+                        $$|f^n(x) - f^n(y)| > \delta$$
+                    </div>
+                    
+                    <div class="formula-box">
+                        <strong>Crescimento Exponencial da Divergência:</strong><br>
+                        $$|\Delta x_n| \approx |\Delta x_0| \cdot e^{\lambda n}$$
+                        <br>onde λ > 0 é o expoente de Lyapunov
+                    </div>
+                    
+                    <h4>📈 Expoentes de Lyapunov</h4>
+                    <p>Medem a taxa média de divergência de trajetórias próximas:</p>
+                    
+                    <div class="parameter-explanation">
+                        <strong>Definição:</strong><br>
+                        $$\lambda = \lim_{n \to \infty} \frac{1}{n} \ln \left| \frac{df^n}{dx} \right|$$
+                        <br><br>
+                        • <strong>λ > 0:</strong> Comportamento caótico<br>
+                        • <strong>λ = 0:</strong> Comportamento periódico<br>
+                        • <strong>λ < 0:</strong> Comportamento estável
+                    </div>
+                    
+                    <h4>⏰ Horizonte de Previsibilidade</h4>
+                    <div class="formula-box">
+                        $$T_{pred} = \frac{1}{\lambda} \ln \left( \frac{\delta_{max}}{\delta_0} \right)$$
+                    </div>
+                    
+                    <ul class="concept-list">
+                        <li><strong>δ₀:</strong> Incerteza inicial na medição</li>
+                        <li><strong>δₘₐₓ:</strong> Máxima incerteza tolerável</li>
+                        <li><strong>λ:</strong> Maior expoente de Lyapunov</li>
+                        <li><strong>Tₚᵣₑ𝒹:</strong> Tempo máximo de previsão confiável</li>
+                    </ul>
+                    
+                    <h4>🌍 Aplicações Práticas</h4>
+                    <p><strong>Meteorologia:</strong> Limitação fundamental na previsão do tempo (~2 semanas)</p>
+                    <p><strong>Economia:</strong> Impossibilidade de previsões de longo prazo em mercados</p>
+                    <p><strong>Ecologia:</strong> Flutuações imprevisíveis em populações</p>
+                    
+                    <div class="interactive-note">
+                        ⚡ <strong>Teste:</strong> Reduza Δx₀ e veja como mesmo diferenças microscópicas levam ao caos!
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- DIAGRAMA DE BIFURCAÇÃO -->
+        <div class="demo-section">
+            <h3 class="section-header">🌳 Cascata de Bifurcações - A Rota de Feigenbaum para o Caos</h3>
+            <div class="section-content">
+                <div class="visualization-panel">
+                    <canvas id="bifurcationCanvas"></canvas>
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="resolutionSlider">Resolução:</label>
+                            <input type="range" id="resolutionSlider" min="100" max="2000" step="100" value="1000">
+                            <span class="value-display" id="resolutionValue">1000</span>
+                        </div>
+                        <button id="generateBifurcation">Gerar Diagrama</button>
+                    </div>
+                </div>
+                
+                <div class="theory-panel">
+                    <h4>🔀 Teoria das Bifurcações</h4>
+                    
+                    <div class="theorem-box">
+                        <div class="theorem-title">Teorema da Bifurcação Transcrítica</div>
+                        Para r = 1, o ponto fixo x* = 0 perde estabilidade e surge x* = (r-1)/r. Esta é uma bifurcação transcrítica onde os pontos fixos "trocam" de estabilidade.
+                    </div>
+                    
+                    <div class="formula-box">
+                        <strong>Constante de Feigenbaum:</strong><br>
+                        $$\delta = \lim_{n \to \infty} \frac{r_n - r_{n-1}}{r_{n+1} - r_n} = 4.669...$$
+                    </div>
+                    
+                    <h4>🎯 Pontos Críticos de Bifurcação</h4>
+                    <ul class="concept-list">
+                        <li><strong>r₁ = 3:</strong> Primeira bifurcação (período-2)</li>
+                        <li><strong>r₂ = 1+√6 ≈ 3.449:</strong> Segunda bifurcação (período-4)</li>
+                        <li><strong>r₃ ≈ 3.544:</strong> Terceira bifurcação (período-8)</li>
+                        <li><strong>r∞ ≈ 3.570:</strong> Acumulação das bifurcações</li>
+                    </ul>
+                    
+                    <div class="parameter-explanation">
+                        <strong>Universalidade de Feigenbaum:</strong><br>
+                        A constante δ = 4.669... aparece em <em>todos</em> os sistemas que seguem a rota de duplicação de período para o caos, independentemente da equação específica!
+                    </div>
+                    
+                    <h4>🔬 Análise Matemática</h4>
+                    
+                    <div class="formula-box">
+                        <strong>Condição de Bifurcação:</strong><br>
+                        $$\frac{d}{dx} f^{(n)}(x^*) = -1$$
+                    </div>
+                    
+                    <p>Onde f⁽ⁿ⁾ é a n-ésima iteração de f.</p>
+                    
+                    <h4>🎨 Estrutura Fractal</h4>
+                    <p>Entre r∞ e r = 4, encontramos:</p>
+                    <ul class="concept-list">
+                        <li><strong>Janelas periódicas:</strong> Ilhas de ordem no caos</li>
+                        <li><strong>Auto-similaridade:</strong> Padrão se repete em escalas menores</li>
+                        <li><strong>Conjunto de Cantor:</strong> Estrutura fractal dos parâmetros caóticos</li>
+                    </ul>
+                    
+                    <div class="theorem-box">
+                        <div class="theorem-title">Teorema de Sharkovsky (1964)</div>
+                        Se f: ℝ → ℝ é contínua e tem um ponto de período 3, então f tem pontos de todos os períodos. Além disso, existe uma ordem universal para o aparecimento dos períodos.
+                    </div>
+                    
+                    <h4>🌐 Aplicações Universais</h4>
+                    <p>Esta mesma estrutura aparece em:</p>
+                    <ul class="concept-list">
+                        <li>Dinâmica populacional em ecologia</li>
+                        <li>Osciladores eletrônicos não-lineares</li>
+                        <li>Reações químicas autocatalíticas</li>
+                        <li>Modelos econômicos de crescimento</li>
+                        <li>Sistemas neurais e cardíacos</li>
+                    </ul>
+                    
+                    <div class="interactive-note">
+                        🔍 <strong>Explore:</strong> Zoom no diagrama revela estruturas auto-similares infinitamente complexas!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuração MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+        
+        // Configuração global
+        let animationIds = [];
+        
+        // 1. MAPA LOGÍSTICO
+        const logisticCanvas = document.getElementById('logisticCanvas');
+        const logisticCtx = logisticCanvas.getContext('2d');
+        logisticCanvas.width = 600;
+        logisticCanvas.height = 350;
+        
+        let logisticData = [];
+        
+        function drawLogisticMap() {
+            const r = parseFloat(document.getElementById('rSlider').value);
+            const x0 = parseFloat(document.getElementById('x0Slider').value);
+            
+            logisticCtx.fillStyle = '#000';
+            logisticCtx.fillRect(0, 0, 600, 350);
+            
+            // Grade elegante
+            logisticCtx.strokeStyle = 'rgba(100, 255, 218, 0.1)';
+            logisticCtx.lineWidth = 1;
+            for (let i = 0; i <= 12; i++) {
+                const x = i * 50;
+                const y = i * 29.17;
+                logisticCtx.beginPath();
+                logisticCtx.moveTo(x, 0);
+                logisticCtx.lineTo(x, 350);
+                logisticCtx.moveTo(0, y);
+                logisticCtx.lineTo(600, y);
+                logisticCtx.stroke();
+            }
+            
+            // Simular iterações
+            let x = x0;
+            logisticData = [];
+            
+            for (let n = 0; n < 300; n++) {
+                logisticData.push(x);
+                x = r * x * (1 - x);
+            }
+            
+            // Desenhar evolução temporal
+            logisticCtx.strokeStyle = '#64ffda';
+            logisticCtx.lineWidth = 2;
+            logisticCtx.beginPath();
+            for (let i = 0; i < logisticData.length && i < 200; i++) {
+                const px = (i / 200) * 600;
+                const py = 350 - (logisticData[i] * 340);
+                if (i === 0) logisticCtx.moveTo(px, py);
+                else logisticCtx.lineTo(px, py);
+            }
+            logisticCtx.stroke();
+            
+            // Destacar últimos pontos (atrator)
+            if (logisticData.length > 100) {
+                logisticCtx.fillStyle = '#ff6b6b';
+                for (let i = 100; i < logisticData.length && i < 200; i++) {
+                    const px = (i / 200) * 600;
+                    const py = 350 - (logisticData[i] * 340);
+                    logisticCtx.fillRect(px - 2, py - 2, 4, 4);
+                }
+            }
+            
+            // Informação de regime
+            let regime = "";
+            if (r < 1) regime = "Extinção";
+            else if (r < 3) regime = "Ponto Fixo";
+            else if (r < 3.57) regime = "Oscilação";
+            else regime = "Caos";
+            
+            logisticCtx.fillStyle = '#ffd93d';
+            logisticCtx.font = '16px Arial';
+            logisticCtx.fillText(`Regime: ${regime}`, 20, 30);
+        }
+        
+        // 2. ATRATOR DE LORENZ
+        const lorenzCanvas = document.getElementById('lorenzCanvas');
+        const lorenzCtx = lorenzCanvas.getContext('2d');
+        lorenzCanvas.width = 600;
+        lorenzCanvas.height = 350;
+        
+        let lorenzPoints = [];
+        let lorenzRunning = false;
+        
+        function animateLorenz() {
+            const sigma = parseFloat(document.getElementById('sigmaSlider').value);
+            const rho = parseFloat(document.getElementById('rhoSlider').value);
+            const beta = parseFloat(document.getElementById('betaSlider').value);
+            
+            let x = 1, y = 1, z = 1;
+            const dt = 0.01;
+            
+            function step() {
+                if (!lorenzRunning) return;
+                
+                const dx = sigma * (y - x);
+                const dy = x * (rho - z) - y;
+                const dz = x * y - beta * z;
+                
+                x += dx * dt;
+                y += dy * dt;
+                z += dz * dt;
+                
+                lorenzPoints.push({x: x, y: y, z: z});
+                
+                if (lorenzPoints.length > 3000) {
+                    lorenzPoints.shift();
+                }
+                
+                // Limpar com fade
+                lorenzCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                lorenzCtx.fillRect(0, 0, 600, 350);
+                
+                // Desenhar trajetória com gradiente
+                for (let i = 1; i < lorenzPoints.length; i++) {
+                    const point = lorenzPoints[i];
+                    const prevPoint = lorenzPoints[i-1];
+                    
+                    const alpha = i / lorenzPoints.length;
+                    const hue = (alpha * 360) % 360;
+                    
+                    lorenzCtx.strokeStyle = `hsla(${hue}, 100%, 70%, ${alpha})`;
+                    lorenzCtx.lineWidth = 1 + alpha;
+                    lorenzCtx.beginPath();
+                    lorenzCtx.moveTo(300 + prevPoint.x * 10, 175 + prevPoint.y * 10);
+                    lorenzCtx.lineTo(300 + point.x * 10, 175 + point.y * 10);
+                    lorenzCtx.stroke();
+                }
+                
+                // Ponto atual brilhante
+                if (lorenzPoints.length > 0) {
+                    const current = lorenzPoints[lorenzPoints.length - 1];
+                    const px = 300 + current.x * 10;
+                    const py = 175 + current.y * 10;
+                    
+                    // Halo
+                    const gradient = lorenzCtx.createRadialGradient(px, py, 0, px, py, 10);
+                    gradient.addColorStop(0, 'rgba(255, 107, 107, 0.8)');
+                    gradient.addColorStop(1, 'rgba(255, 107, 107, 0)');
+                    lorenzCtx.fillStyle = gradient;
+                    lorenzCtx.fillRect(px - 10, py - 10, 20, 20);
+                    
+                    // Ponto central
+                    lorenzCtx.fillStyle = '#ff6b6b';
+                    lorenzCtx.fillRect(px - 3, py - 3, 6, 6);
+                }
+                
+                const id = requestAnimationFrame(step);
+                animationIds.push(id);
+            }
+            
+            lorenzRunning = true;
+            step();
+        }
+        
+        // 3. EFEITO BORBOLETA
+        const butterflyCanvas = document.getElementById('butterflyCanvas');
+        const butterflyCtx = butterflyCanvas.getContext('2d');
+        butterflyCanvas.width = 600;
+        butterflyCanvas.height = 350;
+        
+        let butterflyData1 = [];
+        let butterflyData2 = [];
+        
+        function startButterflyEffect() {
+            const delta = parseFloat(document.getElementById('deltaSlider').value);
+            const r = 3.9;
+            
+            let x1 = 0.5;
+            let x2 = 0.5 + delta;
+            
+            butterflyData1 = [];
+            butterflyData2 = [];
+            
+            butterflyCtx.fillStyle = '#000';
+            butterflyCtx.fillRect(0, 0, 600, 350);
+            
+            // Grade
+            butterflyCtx.strokeStyle = 'rgba(100, 255, 218, 0.1)';
+            butterflyCtx.lineWidth = 1;
+            for (let i = 0; i <= 12; i++) {
+                const x = i * 50;
+                const y = i * 29.17;
+                butterflyCtx.beginPath();
+                butterflyCtx.moveTo(x, 0);
+                butterflyCtx.lineTo(x, 350);
+                butterflyCtx.moveTo(0, y);
+                butterflyCtx.lineTo(600, y);
+                butterflyCtx.stroke();
+            }
+            
+            // Simular
+            for (let n = 0; n < 150; n++) {
+                butterflyData1.push(x1);
+                butterflyData2.push(x2);
+                
+                x1 = r * x1 * (1 - x1);
+                x2 = r * x2 * (1 - x2);
+            }
+            
+            // Desenhar primeira trajetória
+            butterflyCtx.strokeStyle = '#64ffda';
+            butterflyCtx.lineWidth = 2;
+            butterflyCtx.beginPath();
+            for (let i = 0; i < butterflyData1.length; i++) {
+                const px = (i / butterflyData1.length) * 600;
+                const py = 350 - (butterflyData1[i] * 340);
+                if (i === 0) butterflyCtx.moveTo(px, py);
+                else butterflyCtx.lineTo(px, py);
+            }
+            butterflyCtx.stroke();
+            
+            // Desenhar segunda trajetória
+            butterflyCtx.strokeStyle = '#ff6b6b';
+            butterflyCtx.lineWidth = 2;
+            butterflyCtx.beginPath();
+            for (let i = 0; i < butterflyData2.length; i++) {
+                const px = (i / butterflyData2.length) * 600;
+                const py = 350 - (butterflyData2[i] * 340);
+                if (i === 0) butterflyCtx.moveTo(px, py);
+                else butterflyCtx.lineTo(px, py);
+            }
+            butterflyCtx.stroke();
+            
+            // Análise de divergência
+            const differences = [];
+            for (let i = 0; i < Math.min(butterflyData1.length, butterflyData2.length); i++) {
+                differences.push(Math.abs(butterflyData1[i] - butterflyData2[i]));
+            }
+            
+            const finalDiff = differences[differences.length - 1];
+            const maxDiff = Math.max(...differences);
+            
+            // Desenhar divergência
+            butterflyCtx.strokeStyle = '#ffd93d';
+            butterflyCtx.lineWidth = 1;
+            butterflyCtx.beginPath();
+            for (let i = 0; i < differences.length; i++) {
+                const px = (i / differences.length) * 600;
+                const py = 350 - (differences[i] / maxDiff) * 100;
+                if (i === 0) butterflyCtx.moveTo(px, py);
+                else butterflyCtx.lineTo(px, py);
+            }
+            butterflyCtx.stroke();
+            
+            // Info
+            document.getElementById('butterflyInfo').innerHTML = `
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin-top: 15px;">
+                    <strong>📊 Análise da Divergência:</strong><br>
+                    • Diferença inicial: ${delta.toExponential(2)}<br>
+                    • Divergência máxima: ${maxDiff.toFixed(6)}<br>
+                    • Amplificação: ${(maxDiff/delta).toExponential(2)}×<br>
+                    • <span style="color: #64ffda;">Azul:</span> Trajetória 1<br>
+                    • <span style="color: #ff6b6b;">Vermelho:</span> Trajetória 2<br>
+                    • <span style="color: #ffd93d;">Amarelo:</span> Diferença absoluta
+                </div>
+            `;
+        }
+        
+        // 4. DIAGRAMA DE BIFURCAÇÃO
+        const bifurcationCanvas = document.getElementById('bifurcationCanvas');
+        const bifurcationCtx = bifurcationCanvas.getContext('2d');
+        bifurcationCanvas.width = 600;
+        bifurcationCanvas.height = 350;
+        
+        function generateBifurcationDiagram() {
+            const resolution = parseInt(document.getElementById('resolutionSlider').value);
+            
+            bifurcationCtx.fillStyle = '#000';
+            bifurcationCtx.fillRect(0, 0, 600, 350);
+            
+            // Eixos
+            bifurcationCtx.strokeStyle = 'rgba(100, 255, 218, 0.3)';
+            bifurcationCtx.lineWidth = 2;
+            bifurcationCtx.beginPath();
+            bifurcationCtx.moveTo(50, 320);
+            bifurcationCtx.lineTo(580, 320);
+            bifurcationCtx.moveTo(50, 30);
+            bifurcationCtx.lineTo(50, 320);
+            bifurcationCtx.stroke();
+            
+            // Labels
+            bifurcationCtx.fillStyle = '#64ffda';
+            bifurcationCtx.font = '14px Arial';
+            bifurcationCtx.fillText('r', 590, 335);
+            bifurcationCtx.fillText('x', 35, 25);
+            bifurcationCtx.fillText('2.5', 50, 340);
+            bifurcationCtx.fillText('4.0', 570, 340);
+            
+            // Marcações importantes
+            const r1 = 3.0; // Primeira bifurcação
+            const r2 = 1 + Math.sqrt(6); // Segunda bifurcação
+            const rInf = 3.57; // Início do caos
+            
+            const x1 = 50 + ((r1 - 2.5) / 1.5) * 530;
+            const x2 = 50 + ((r2 - 2.5) / 1.5) * 530;
+            const xInf = 50 + ((rInf - 2.5) / 1.5) * 530;
+            
+            bifurcationCtx.strokeStyle = '#ff6b6b';
+            bifurcationCtx.lineWidth = 1;
+            bifurcationCtx.setLineDash([5, 5]);
+            [x1, x2, xInf].forEach(x => {
+                bifurcationCtx.beginPath();
+                bifurcationCtx.moveTo(x, 30);
+                bifurcationCtx.lineTo(x, 320);
+                bifurcationCtx.stroke();
+            });
+            bifurcationCtx.setLineDash([]);
+            
+            // Gerar pontos
+            for (let i = 0; i < resolution; i++) {
+                const r = 2.5 + (1.5 * i / resolution);
+                let x = 0.5;
+                
+                // Período transiente
+                for (let j = 0; j < 1000; j++) {
+                    x = r * x * (1 - x);
+                }
+                
+                // Coleta de pontos do atrator
+                const points = [];
+                for (let j = 0; j < 500; j++) {
+                    x = r * x * (1 - x);
+                    points.push(x);
+                }
+                
+                // Desenhar pontos com cores baseadas na densidade
+                const px = 50 + ((r - 2.5) / 1.5) * 530;
+                
+                // Usar cores diferentes para diferentes regimes
+                let color;
+                if (r < 3) color = '#2ed573'; // Verde para ponto fixo
+                else if (r < 3.57) color = '#ffa502'; // Laranja para oscilação
+                else color = '#ff6348'; // Vermelho para caos
+                
+                bifurcationCtx.fillStyle = color;
+                
+                points.forEach(point => {
+                    const py = 320 - (point * 290);
+                    bifurcationCtx.fillRect(px, py, 1, 1);
+                });
+            }
+            
+            // Legenda
+            bifurcationCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            bifurcationCtx.fillRect(400, 50, 180, 120);
+            bifurcationCtx.strokeStyle = '#64ffda';
+            bifurcationCtx.lineWidth = 1;
+            bifurcationCtx.strokeRect(400, 50, 180, 120);
+            
+            bifurcationCtx.fillStyle = '#fff';
+            bifurcationCtx.font = '12px Arial';
+            bifurcationCtx.fillText('Regimes:', 410, 70);
+            
+            const colors = ['#2ed573', '#ffa502', '#ff6348'];
+            const labels = ['Ponto Fixo', 'Oscilação', 'Caos'];
+            
+            colors.forEach((color, idx) => {
+                bifurcationCtx.fillStyle = color;
+                bifurcationCtx.fillRect(410, 80 + idx * 20, 15, 10);
+                bifurcationCtx.fillStyle = '#fff';
+                bifurcationCtx.fillText(labels[idx], 435, 89 + idx * 20);
+            });
+        }
+        
+        // EVENT LISTENERS
+        document.getElementById('rSlider').addEventListener('input', function() {
+            document.getElementById('rValue').textContent = parseFloat(this.value).toFixed(2);
+            drawLogisticMap();
+        });
+        
+        document.getElementById('x0Slider').addEventListener('input', function() {
+            document.getElementById('x0Value').textContent = parseFloat(this.value).toFixed(2);
+            drawLogisticMap();
+        });
+        
+        document.getElementById('resetLogistic').addEventListener('click', function() {
+            document.getElementById('rSlider').value = 3.5;
+            document.getElementById('x0Slider').value = 0.5;
+            document.getElementById('rValue').textContent = '3.50';
+            document.getElementById('x0Value').textContent = '0.50';
+            drawLogisticMap();
+        });
+        
+        // Controles Lorenz
+        ['sigmaSlider', 'rhoSlider', 'betaSlider'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                const value = parseFloat(this.value);
+                document.getElementById(id.replace('Slider', 'Value')).textContent = value.toFixed(1);
+            });
+        });
+        
+        document.getElementById('resetLorenz').addEventListener('click', function() {
+            lorenzRunning = false;
+            lorenzPoints = [];
+            lorenzCtx.fillStyle = '#000';
+            lorenzCtx.fillRect(0, 0, 600, 350);
+            setTimeout(() => animateLorenz(), 100);
+        });
+        
+        // Controles Efeito Borboleta
+        document.getElementById('deltaSlider').addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            document.getElementById('deltaValue').textContent = value.toExponential(0);
+        });
+        
+        document.getElementById('startButterfly').addEventListener('click', startButterflyEffect);
+        
+        document.getElementById('resetButterfly').addEventListener('click', function() {
+            butterflyCtx.fillStyle = '#000';
+            butterflyCtx.fillRect(0, 0, 600, 350);
+            document.getElementById('butterflyInfo').innerHTML = '';
+        });
+        
+        // Controles Bifurcação
+        document.getElementById('resolutionSlider').addEventListener('input', function() {
+            document.getElementById('resolutionValue').textContent = this.value;
+        });
+        
+        document.getElementById('generateBifurcation').addEventListener('click', generateBifurcationDiagram);
+        
+        // Inicialização
+        drawLogisticMap();
+        animateLorenz();
+        generateBifurcationDiagram();
+        
+        // Cleanup
+        window.addEventListener('beforeunload', function() {
+            lorenzRunning = false;
+            animationIds.forEach(id => cancelAnimationFrame(id));
+        });
+    </script>
+</body>
+</html>
