@@ -4,6 +4,9 @@ A classical chess engine implementation based on Claude Shannon's groundbreaking
 
 ## Overview
 
+![Shannon Chess Engine - Visual](shannon-chess-engine.png)
+
+
 This chess engine implements Shannon's Type A strategy, combining material evaluation with positional analysis using the minimax algorithm with alpha-beta pruning. It provides an interactive web-based interface where you can play against the AI and observe the evaluation process in real-time.
 
 ## Features
